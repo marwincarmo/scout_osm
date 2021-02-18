@@ -23,7 +23,7 @@ dados <- SharedData$new(data)
 bscols(
   widths = c(3, 9),
   list(
-    filter_checkbox("specific_position", "Position", dados, ~specific_position),
+    filter_checkbox("specific_position", "Position", dados, ~specific_position, inline = TRUE, columns = 4),
     filter_slider("age", "Age", dados, ~age, width = "100%", step = 1),
     filter_slider("value", "Value", dados, ~value, width = "100%", step = 100000),
     filter_select("nationality", "Nationality", dados, ~nationality),
