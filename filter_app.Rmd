@@ -6,5 +6,52 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE,
+                      message=FALSE)
 ```
+
+```{r }
+library(tidyverse)
+library(crosstalk)
+library(reactable)
+```
+
+```{r}
+data <- readRDS("data/data_app")
+dados <- SharedData$new(data)
+
+bscols(
+  widths = c(3, 9),
+  list(
+    filter_checkbox("specific_position", "Position", dados, ~specific_position),
+    filter_slider("age", "Age", dados, ~age, width = "100%", step = 1),
+    filter_slider("value", "Value", dados, ~value, width = "100%", step = 100000),
+    filter_select("nationality", "Nationality", dados, ~nationality),
+    filter_select("full_name", "Name", dados, ~full_name),
+    filter_select("league_name", "League", dados, ~league_name),
+    filter_select("team_name", "Team", dados, ~team_name)
+  ),
+  reactable(dados, minRows = 10,
+            columns = list(
+    full_name = colDef(name = "Name", minWidth = 150),
+    squad_number= colDef(name = "Num", width = 50),
+    specific_position= colDef(name = "Pos", width = 50),
+    stat_att = colDef(name = "Att", width = 50),
+    stat_def = colDef(name = "Def", width = 50),
+    stat_ovr = colDef(name = "Ovr", width = 50),
+    age= colDef(name = "Age", width = 50),
+    value = colDef(name = "Value", 
+                   format = colFormat(separators = TRUE, 
+                                      locales = "en-US")),
+    team_name = colDef(name = "Team"),
+    nationality = colDef(name = "Nat"),
+    league_name = colDef(name = "League")
+  ),
+  wrap = FALSE, 
+  resizable = TRUE,
+  showPageSizeOptions = TRUE, 
+  highlight = TRUE,
+  paginationType = "jump")
+)
+```
+
