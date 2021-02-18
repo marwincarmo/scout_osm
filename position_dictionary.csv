@@ -1,0 +1,13 @@
+position_num;position;specific_position_num;specific_position
+1;Foward;4;ST
+1;Foward;8;LF
+1;Foward;11;RF
+2;Midfielder;1;CAM
+2;Midfielder;2;CM
+2;Midfielder;5;CDM
+2;Midfielder;7;LM
+2;Midfielder;10;RM
+3;Defender;3;CB
+3;Defender;9;LB
+3;Defender;12;RB
+4;Goalkeeper;6;GK
