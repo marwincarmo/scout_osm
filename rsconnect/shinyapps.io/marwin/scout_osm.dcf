@@ -1,0 +1,13 @@
+name: scout_osm
+title: scout_osm
+username:
+account: marwin
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3750975
+bundleId: 4313540
+url: https://marwin.shinyapps.io/scout_osm/
+when: 1615151961.33632
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: analises.R|app_dashboard.R|exemplo.R|filter_app.html|filter_app.Rmd|raspagem.R|README.md|testes.R|data/data_app|data/position_dictionary.csv

@@ -2,6 +2,7 @@ library(shiny)
 library(reactable)
 library(tidyverse)
 
+
 osm_df <- read_rds("data/data_app")
 
 no_filter <- function(input, val) {
