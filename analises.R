@@ -1,6 +1,6 @@
 library(tidyverse)
 
-players <- readRDS("players.rds")
+players <- readRDS("data/players.rds")
 
 
 players %>% 
@@ -41,15 +41,18 @@ jog <- select(players, squad_number, full_name, age, specific_position, position
     specific_position = fct_reorder(specific_position, position)) %>% 
   select(-position)
 
-saveRDS(jog, "dados_app.rds")
+#saveRDS(jog, "dados_app.rds")
 dados <- SharedData$new(jog)
 
 bscols(
   widths = c(3, 9),
   list(
-    filter_checkbox("specific_position", "Position", dados, ~specific_position),
+    filter_checkbox("specific_position", "Position", dados, ~specific_position, inline = TRUE, columns = 4),
     filter_slider("age", "Age", dados, ~age, width = "100%", step = 1),
     filter_slider("value", "Value", dados, ~value, width = "100%", step = 100000),
+    filter_slider("att", "Attack", dados, ~stat_att, width = "100%", step = 1),
+    filter_slider("def", "Defense", dados, ~stat_def, width = "100%", step = 1),
+    filter_slider("ovr", "Overall", dados, ~stat_ovr, width = "100%", step = 1),
     filter_select("nationality", "Nationality", dados, ~nationality),
     filter_select("full_name", "Name", dados, ~full_name),
     filter_select("league_name", "League", dados, ~league_name),
