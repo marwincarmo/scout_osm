@@ -111,7 +111,7 @@ server <- function(input, output, session){
              stat_ovr %in% seq(min(input$ovr), max(input$ovr)),
              nationality %in% nat(),
              specific_position %in% pos(),
-             full_name %in% nome(),
+             full_name %in% nome(), #colocar contains pra pegar nomes nao completos
              league_name %in% liga(),
              team_name %in% time()) %>% 
       reactable(minRows = 10,
