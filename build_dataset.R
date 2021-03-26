@@ -1,5 +1,5 @@
 library(tidyverse)
-data <- read_rds("data/players.rds")
+data <- read_rds("data/db_21-03-26.rds")
 
 glimpse(data)
 
