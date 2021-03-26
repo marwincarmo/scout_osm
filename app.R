@@ -3,7 +3,7 @@ library(reactable)
 library(tidyverse)
 
 
-osm_df <- read_rds("data/data_app")
+osm_df <- read_rds("data/data_app-v2")
 
 no_filter <- function(input, val) {
   if (is.null(input)) {
@@ -17,12 +17,20 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       checkboxGroupInput(inputId = "position",
-                         label = "Player's position",
+                         label = "Position",
                          choices = sort(unique(osm_df$specific_position)),
                          inline = TRUE
       ),
+      sliderInput(inputId = "main",
+                  label = "Main quality",
+                  min = min(osm_df$stat_main),
+                  max = max(osm_df$stat_main),
+                  value = c(min(osm_df$stat_main),
+                            max(osm_df$stat_main)),
+                  step = 1
+      ),
      sliderInput(inputId = "att",
-                      label = "Player's attack",
+                      label = "Attack",
                       min = min(osm_df$stat_att),
                       max = max(osm_df$stat_att),
                       value = c(min(osm_df$stat_att),
@@ -30,7 +38,7 @@ ui <- fluidPage(
                       step = 1
       ),
      sliderInput(inputId = "def",
-                      label = "Player's defense",
+                      label = "Defense",
                       min = min(osm_df$stat_def),
                       max = max(osm_df$stat_def),
                       value = c(min(osm_df$stat_def),
@@ -38,7 +46,7 @@ ui <- fluidPage(
                       step = 1
       ),
       sliderInput(inputId = "ovr",
-                      label = "Player's overall",
+                      label = "Overall",
                       min = min(osm_df$stat_ovr),
                       max = max(osm_df$stat_ovr),
                       value = c(min(osm_df$stat_ovr),
@@ -46,7 +54,7 @@ ui <- fluidPage(
                       step = 1
       ),
       sliderInput(inputId = "age",
-                      label = "Player's age",
+                      label = "Age",
                       min = min(osm_df$age),
                       max = max(osm_df$age),
                       value = c(min(osm_df$age),
@@ -54,21 +62,20 @@ ui <- fluidPage(
                       step = 1
       ),
       sliderInput(inputId = "value",
-                      label = "Player's value",
+                      label = "Value",
                       min = min(osm_df$value),
                       max = max(osm_df$value),
                       value = c(min(osm_df$value), 
                                 max(osm_df$value)),
-                      pre = "$", sep = ",",
-                      step = 1000
+                      post = "M", step = 0.1
       ),
       selectInput(inputId = "nationality",
-                      label = "Player's nationality",
+                      label = "Nationality",
                       choices = sort(unique(osm_df$nationality)),
                       multiple = TRUE
       ),
       selectizeInput(inputId = "name",
-                         label = "Player's name",
+                         label = "Name",
                          choices = NULL,
                          multiple = TRUE
       ),
@@ -105,7 +112,8 @@ server <- function(input, output, session){
     
     table_df %>% 
       filter(age %in% seq(min(input$age), max(input$age)),
-             value %in% seq(min(input$value), max(input$value)),
+             value >= min(input$value), value <= max(input$value),
+             stat_main %in% seq(min(input$main), max(input$main)),
              stat_att %in% seq(min(input$att), max(input$att)),
              stat_def %in% seq(min(input$def), max(input$def)),
              stat_ovr %in% seq(min(input$ovr), max(input$ovr)),
@@ -116,7 +124,8 @@ server <- function(input, output, session){
              team_name %in% time()) %>% 
       reactable(minRows = 10,
                 columns = list(
-                  full_name = colDef(name = "Name", minWidth = 150),
+                  full_name = colDef(name = "Name", minWidth = 150,
+                                     resizable = T),
                   squad_number= colDef(name = "Num", width = 50),
                   specific_position= colDef(name = "Pos", width = 50),
                   stat_att = colDef(name = "Att", width = 50),
@@ -125,10 +134,19 @@ server <- function(input, output, session){
                   age= colDef(name = "Age", width = 50),
                   value = colDef(name = "Value", 
                                  format = colFormat(separators = TRUE, 
-                                                    locales = "en-US")),
-                  team_name = colDef(name = "Team"),
-                  nationality = colDef(name = "Nationality"),
-                  league_name = colDef(name = "League")
+                                                    locales = "en-US",
+                                                    suffix = "M"),
+                                 width = 70),
+                  range = colDef(name = "Est. Scout Value", width = 130),
+                  team_name = colDef(name = "Team",
+                                     width = 130,
+                                     resizable = TRUE),
+                  nationality = colDef(name = "Nationality",
+                                       width = 130),
+                  league_name = colDef(name = "League"),
+                  position = colDef(show = FALSE),
+                  stat_main = colDef(show = FALSE),
+                  quality = colDef(show = FALSE)
                 ),
                 wrap = FALSE, 
                 showPageSizeOptions = TRUE, 

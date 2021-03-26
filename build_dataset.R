@@ -1,9 +1,7 @@
 library(tidyverse)
 data <- read_rds("data/db_21-03-26.rds")
 
-glimpse(data)
-
-data <- data %>% 
+data_2 <- data %>% 
   select(squad_number, full_name, age, specific_position, position, stat_att, stat_def,
          stat_ovr, value, team_name, nationality, league_name) %>% 
   mutate(specific_position = case_when(
@@ -34,6 +32,13 @@ data <- data %>%
     stat_main %in% 65:74 ~ "65-74",
     stat_main %in% 75:84 ~ "75-84",
     stat_main >= 85 ~ "85+"
-  ))
+  )) %>% 
+  mutate(value = round((value / 1000000), 2),
+         est_min = round((est_min / 1000000), 2),
+         est_max = round((est_max / 1000000), 2)) %>% 
+  mutate(range = paste0(est_min, "M", " - ", est_max, "M"), .after = value) %>% 
+  select(-c(est_min, est_max))
 
-saveRDS(data, "data/data_app-v2")
+glimpse(data_2)
+
+saveRDS(data_2, "data/data_app-v2")
