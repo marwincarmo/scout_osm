@@ -10,8 +10,4 @@ url: https://marwin.shinyapps.io/scout_osm/
 when: 1615152704.01101
 asMultiple: FALSE
 asStatic: FALSE
-<<<<<<< HEAD
 ignoredFiles: analises.R|app_dashboard.R|exemplo.R|filter_app.html|filter_app.Rmd|raspagem.R|README.md|testes.R|data/players.rds|data/position_dictionary.csv
-=======
-ignoredFiles: analises.R|app_dashboard.R|exemplo.R|filter_app.html|filter_app.Rmd|raspagem.R|README.md|testes.R|data/position_dictionary.csv
->>>>>>> dd76571e61cb816d7c993458095604bcee518229
