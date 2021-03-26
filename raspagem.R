@@ -67,9 +67,9 @@ league_names <- leagues %>%
   select(id, name) %>% 
   rename(league_name = name)
 
-players <- players %>%
-  #left_join(league_names, by = c("league_type_id" = "id"), 
-  #          .keep = FALSE) %>% 
+players_df <- players_df %>%
+  left_join(league_names, by = c("league_type_id" = "id"), 
+            .keep = FALSE) %>% 
   mutate(age_category = factor(case_when(
     age < 25 ~ "Young",
     age %in% 25:29 ~ "Experienced",
@@ -78,5 +78,5 @@ players <- players %>%
   .after = "age")
 
 
-glimpse(players)
-saveRDS(players, "data/players.rds")
+glimpse(players_df)
+saveRDS(players_df, "data/db_21-03-26.rds")
