@@ -1,6 +1,7 @@
 library(shiny)
 library(reactable)
 library(tidyverse)
+library(shinydashboard)
 
 
 osm_df <- read_rds("data/data_app-v2")
@@ -13,86 +14,141 @@ no_filter <- function(input, val) {
   }
 }
 
-ui <- fluidPage(
-  sidebarLayout(
-    sidebarPanel(
-      checkboxGroupInput(inputId = "position",
-                         label = "Position",
-                         choices = sort(unique(osm_df$specific_position)),
-                         inline = TRUE
-      ),
-      sliderInput(inputId = "main",
-                  label = "Main quality",
-                  min = min(osm_df$stat_main),
-                  max = max(osm_df$stat_main),
-                  value = c(min(osm_df$stat_main),
-                            max(osm_df$stat_main)),
-                  step = 1
-      ),
-     sliderInput(inputId = "att",
-                      label = "Attack",
-                      min = min(osm_df$stat_att),
-                      max = max(osm_df$stat_att),
-                      value = c(min(osm_df$stat_att),
-                                max(osm_df$stat_att)),
-                      step = 1
-      ),
-     sliderInput(inputId = "def",
-                      label = "Defense",
-                      min = min(osm_df$stat_def),
-                      max = max(osm_df$stat_def),
-                      value = c(min(osm_df$stat_def),
-                                max(osm_df$stat_def)),
-                      step = 1
-      ),
-      sliderInput(inputId = "ovr",
-                      label = "Overall",
-                      min = min(osm_df$stat_ovr),
-                      max = max(osm_df$stat_ovr),
-                      value = c(min(osm_df$stat_ovr),
-                                max(osm_df$stat_ovr)),
-                      step = 1
-      ),
-      sliderInput(inputId = "age",
-                      label = "Age",
-                      min = min(osm_df$age),
-                      max = max(osm_df$age),
-                      value = c(min(osm_df$age),
-                                max(osm_df$age)),
-                      step = 1
-      ),
-      sliderInput(inputId = "value",
-                      label = "Value",
-                      min = min(osm_df$value),
-                      max = max(osm_df$value),
-                      value = c(min(osm_df$value), 
-                                max(osm_df$value)),
-                      post = "M", step = 0.1
-      ),
-      selectInput(inputId = "nationality",
-                      label = "Nationality",
-                      choices = sort(unique(osm_df$nationality)),
-                      multiple = TRUE
-      ),
-      selectizeInput(inputId = "name",
-                         label = "Name",
-                         choices = NULL,
-                         multiple = TRUE
-      ),
-      selectInput(inputId = "league",
-                      label = "League",
-                      choices = sort(unique(osm_df$league_name)),
-                      multiple = TRUE
-      ),
-      selectizeInput(inputId = "team",
-                         label = "Team",
-                         choices = NULL,
-                         multiple = TRUE
-      )
-    ),
-    mainPanel(reactableOutput("players_table"))
+
+body <- dashboardBody(
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+  tabItems(
+    tabItem(tabName = "scout_tab",
+            fluidRow(
+              column(width = 3,
+                     box(width = NULL,
+                       title = "Position",
+                       status = "primary",
+                       solidHeader = TRUE,
+                       checkboxGroupInput(inputId = "position",
+                                          label = NULL,
+                                          choices = sort(unique(osm_df$specific_position)),
+                                          inline = TRUE)
+                       ),
+                     box(width = NULL,
+                       title = "Attributes",
+                       status = "primary",
+                       solidHeader = TRUE,
+                       sliderInput(inputId = "main",
+                                   label = "Main quality",
+                                   min = min(osm_df$stat_main),
+                                   max = max(osm_df$stat_main),
+                                   value = c(min(osm_df$stat_main),
+                                             max(osm_df$stat_main)),
+                                   step = 1
+                                   ),
+                       sliderInput(inputId = "att",
+                                   label = "Attack",
+                                   min = min(osm_df$stat_att),
+                                   max = max(osm_df$stat_att),
+                                   value = c(min(osm_df$stat_att),
+                                             max(osm_df$stat_att)),
+                                   step = 1
+                                   ),
+                       sliderInput(inputId = "def",
+                                   label = "Defense",
+                                   min = min(osm_df$stat_def),
+                                   max = max(osm_df$stat_def),
+                                   value = c(min(osm_df$stat_def),
+                                             max(osm_df$stat_def)),
+                                   step = 1
+                                   ),
+                       sliderInput(inputId = "ovr",
+                                   label = "Overall",
+                                   min = min(osm_df$stat_ovr),
+                                   max = max(osm_df$stat_ovr),
+                                   value = c(min(osm_df$stat_ovr),
+                                             max(osm_df$stat_ovr)),
+                                   step = 1
+                                   ),
+                       sliderInput(inputId = "age",
+                                   label = "Age",
+                                   min = min(osm_df$age),
+                                   max = max(osm_df$age),
+                                   value = c(min(osm_df$age),
+                                             max(osm_df$age)),
+                                   step = 1
+                                   ),
+                       sliderInput(inputId = "value",
+                                   label = "Value",
+                                   min = min(osm_df$value),
+                                   max = max(osm_df$value),
+                                   value = c(min(osm_df$value), 
+                                             max(osm_df$value)),
+                                   post = "M", step = 0.1)
+                       ),
+                     box(width = NULL,
+                         title = "Details",
+                         status = "primary",
+                         solidHeader = TRUE,
+                         selectInput(inputId = "nationality",
+                                     label = "Nationality",
+                                     choices = sort(unique(osm_df$nationality)),
+                                     multiple = TRUE
+                                     ),
+                         selectizeInput(inputId = "name",
+                                        label = "Name",
+                                        choices = NULL,
+                                        multiple = TRUE
+                                        ),
+                         selectInput(inputId = "league",
+                                     label = "League",
+                                     choices = sort(unique(osm_df$league_name)),
+                                     multiple = TRUE
+                                     ),
+                         selectizeInput(inputId = "team",
+                                        label = "Team",
+                                        choices = NULL,
+                                        multiple = TRUE)
+                         )
+                     ),
+              column(width = 9,
+                     box(width = NULL,
+                         reactableOutput("players_table")
+                         )
+                     )
+              )
+            ),
+    tabItem(tabName = "nationality_tab",
+            fluidRow(
+              box(width = NULL,
+                  reactableOutput("nationality_table"))
+              )
+            )
+    )
   )
-)
+
+ui <- dashboardPage(
+  dashboardHeader(title = "OSM Scout"),
+  
+  dashboardSidebar(
+    collapsed = TRUE,
+    sidebarMenu(
+      menuItem("Scout",
+               tabName = "scout_tab",
+               icon = icon("futbol")),
+      menuItem("Nationality",
+               tabName = "nationality_tab",
+               icon = icon("flag"))
+    ),
+    selectInput(inputId = "age_cat",
+                label = "Filter nationality by age",
+                choices = sort(unique(osm_df$age_category)),
+                multiple = TRUE
+    )
+  ),
+  body
+  )
+                  
+                
+              
+              
 
 server <- function(input, output, session){
   
@@ -107,6 +163,7 @@ server <- function(input, output, session){
   nome <- reactive(no_filter(input$name, osm_df$full_name))
   liga <- reactive(no_filter(input$league, osm_df$league_name))
   time <- reactive(no_filter(input$team, osm_df$team_name))
+  idade <- reactive(no_filter(input$age_cat, osm_df$age_category))
   
   output$players_table <- renderReactable({
     
@@ -123,6 +180,7 @@ server <- function(input, output, session){
              league_name %in% liga(),
              team_name %in% time()) %>% 
       reactable(minRows = 10,
+                defaultPageSize = 10,
                 columns = list(
                   full_name = colDef(name = "Name", minWidth = 150,
                                      resizable = T),
@@ -146,12 +204,41 @@ server <- function(input, output, session){
                   league_name = colDef(name = "League"),
                   position = colDef(show = FALSE),
                   stat_main = colDef(show = FALSE),
-                  quality = colDef(show = FALSE)
+                  quality = colDef(show = FALSE),
+                  age_category = colDef(show = FALSE)
                 ),
                 wrap = FALSE, 
                 showPageSizeOptions = TRUE, 
                 highlight = TRUE,
                 paginationType = "jump")
+  })
+  
+  output$nationality_table <- renderReactable({
+    table_df %>% 
+      filter(age_category %in% idade()) %>% 
+      group_by(nationality, position) %>% 
+      count() %>% 
+      pivot_wider(names_from =  position, values_from = n) %>% 
+      mutate(across(c(1:4), ~replace(., is.na(.), 0))) %>% 
+      mutate(Total = sum(c_across(1:4)), .after = "nationality") %>% 
+      rename("Fowards" = `1`,
+             "Midfielders" = `2`,
+             "Defenders" = `3`,
+             "Goalkeepers" = `4`) %>% 
+      arrange(desc(Total)) %>% 
+      reactable(
+        defaultColDef = colDef(align = "center"),
+        minRows = 10,
+        columns = list(
+          nationality = colDef(name = "Nationality",
+                               filterable = TRUE,
+                               align = "left")
+        ),
+        wrap = FALSE, 
+        showPageSizeOptions = TRUE, 
+        highlight = TRUE,
+        paginationType = "jump"
+      )
   })
 }
 
