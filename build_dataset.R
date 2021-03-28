@@ -3,7 +3,7 @@ data <- read_rds("data/db_21-03-26.rds")
 
 data_2 <- data %>% 
   select(squad_number, full_name, age, specific_position, position, stat_att, stat_def,
-         stat_ovr, value, team_name, nationality, league_name) %>% 
+         stat_ovr, value, team_name, nationality, league_name,age_category) %>% 
   mutate(specific_position = case_when(
     specific_position == 4 ~ "ST",
     specific_position == 8 ~ "LF",

@@ -1,23 +1,20 @@
 library(shiny)
-library(crosstalk)
-library(d3scatter)
+library(shinydashboard)
+library(tidyverse)
 
-ui <- fluidPage(
-  fluidRow(
-    column(6, d3scatterOutput("scatter1")),
-    column(6, d3scatterOutput("scatter2"))
-  )
+ui <- dashboardPage(
+  dashboardHeader(title = "Dynamic sidebar"),
+  dashboardSidebar(
+    sidebarMenuOutput("menu")
+  ),
+  dashboardBody()
 )
 
-server <- function(input, output, session) {
-  shared_iris <- SharedData$new(iris)
-  
-  output$scatter1 <- renderD3scatter({
-    d3scatter(shared_iris, ~Petal.Length, ~Petal.Width, ~Species, width = "100%")
-  })
-  
-  output$scatter2 <- renderD3scatter({
-    d3scatter(shared_iris, ~Sepal.Length, ~Sepal.Width, ~Species, width = "100%")
+server <- function(input, output) {
+  output$menu <- renderMenu({
+    sidebarMenu(
+      menuItem("Menu item", icon = icon("calendar"))
+    )
   })
 }
 
