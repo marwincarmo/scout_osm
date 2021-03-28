@@ -215,18 +215,30 @@ server <- function(input, output, session){
   
   output$nationality_table <- renderReactable({
     table_df %>% 
-      filter(age_category == idade()) %>% 
+      filter(age_category %in% idade()) %>% 
       group_by(nationality, position) %>% 
       count() %>% 
       pivot_wider(names_from =  position, values_from = n) %>% 
       mutate(across(c(1:4), ~replace(., is.na(.), 0))) %>% 
       mutate(Total = sum(c_across(1:4)), .after = "nationality") %>% 
-      rename("Foward" = `1`,
-             "Midfielder" = `2`,
-             "Defender" = `3`,
-             "Goalkeeper" = `4`) %>% 
+      rename("Fowards" = `1`,
+             "Midfielders" = `2`,
+             "Defenders" = `3`,
+             "Goalkeepers" = `4`) %>% 
       arrange(desc(Total)) %>% 
-      reactable()
+      reactable(
+        defaultColDef = colDef(align = "center"),
+        minRows = 10,
+        columns = list(
+          nationality = colDef(name = "Nationality",
+                               filterable = TRUE,
+                               align = "left")
+        ),
+        wrap = FALSE, 
+        showPageSizeOptions = TRUE, 
+        highlight = TRUE,
+        paginationType = "jump"
+      )
   })
 }
 
