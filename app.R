@@ -2,9 +2,11 @@ library(shiny)
 library(reactable)
 library(tidyverse)
 library(shinydashboard)
-
+library(shinyWidgets)
 
 osm_df <- read_rds("data/data_app-v2")
+
+posicoes <- as.character(sort(unique(osm_df$specific_position)))
 
 no_filter <- function(input, val) {
   if (is.null(input)) {
@@ -26,11 +28,16 @@ body <- dashboardBody(
                        title = "Position",
                        status = "primary",
                        solidHeader = TRUE,
-                       checkboxGroupInput(inputId = "position",
+                       checkboxGroupButtons(inputId = "position",
                                           label = NULL,
-                                          choices = sort(unique(osm_df$specific_position)),
-                                          inline = TRUE)
-                       ),
+                                          choices = posicoes,
+                                          #inline = TRUE,
+                                          justified = TRUE,
+                                          direction = "vertical",
+                                          checkIcon = list(
+                                            yes = icon("ok", 
+                                                       lib = "glyphicon"))
+                       )),
                      box(width = NULL,
                        title = "Attributes",
                        status = "primary",
